@@ -32,32 +32,32 @@ export const useInsertDocument = (docCollection) => {
         if (!cancelled) {
             dispatch(action);
         }
+    }
+    const insertDocument = async (document) => {
+        checkCancelBeforeDispatch({
+            type: "LOADING"
+        })
 
-        const insertDocument = async (document) => {
+        try {
+            const newDocument = { ...document, createdAt: Timestamp.now() };
+
+            const insertedDocument = await addDoc(
+                collection(db, docCollection),
+                newDocument
+            );
+
             checkCancelBeforeDispatch({
-                type: "LOADING"
+                type: "INSERTED_DOC",
+                payload: insertedDocument
             })
-
-            try {
-                const newDocument = { ...document, createdAt: Timestamp.now() };
-
-                const insertedDocument = await addDoc(
-                    collection(db, docCollection),
-                    newDocument
-                );
-
-                checkCancelBeforeDispatch({
-                    type: "INSERTED_DOC",
-                    payload: insertedDocument
-                })
-            } catch (error) {
-                checkCancelBeforeDispatch({
-                    type: "ERROR",
-                    payload: error.message
-                })
-            }
+        } catch (error) {
+            checkCancelBeforeDispatch({
+                type: "ERROR",
+                payload: error.message
+            })
         }
     }
+
 
     useEffect(() => {
         return () => setCancelled(true);
