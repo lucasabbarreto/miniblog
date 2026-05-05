@@ -65,7 +65,7 @@ const CreatePost = () => {
                     <input type="text" name="tags" placeholder="Digite tags separadas por vírgula..."
                         onChange={(e) => setTags(e.target.value)} value={tags} />
                 </label>
-                {!response.loading && <button className="btn">Cadastrar</button>}
+                {!response.loading && <button className="btn">Postar</button>}
                 {response.loading && (
                     <button className="btn" disabled>
                         Aguarde...
